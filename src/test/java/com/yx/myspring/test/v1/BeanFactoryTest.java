@@ -6,19 +6,18 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.junit.Test;
 
-import com.yx.myspring.TestYX;
 import com.yx.myspring.beans.BeanDefinition;
 import com.yx.myspring.beans.factory.support.DefaultBeanFactory;
 import com.yx.myspring.beans.factory.xml.XMLBeanDefinitionReader;
 import com.yx.myspring.core.io.Resource;
 import com.yx.myspring.core.io.support.ClassPathResource;
 import com.yx.myspring.core.io.support.UrlResource;
+import com.yx.myspring.service.v1.TestYX;
 
 public class BeanFactoryTest {
 
@@ -33,7 +32,7 @@ public class BeanFactoryTest {
 		assertNotNull(testyx);
 		BeanDefinition bd=factory.getBeanDefinition("testyx");
 		assertNotNull(bd);
-		assertEquals("com.yx.myspring.TestYX", bd.getBeanClassName());
+		assertEquals("com.yx.myspring.service.v1.TestYX", bd.getBeanClassName());
 	}
 	
 	@Test
@@ -79,7 +78,6 @@ public class BeanFactoryTest {
 			methodSet.invoke(useryx, "yxtest");
 			methodSay.invoke(useryx);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
 	}

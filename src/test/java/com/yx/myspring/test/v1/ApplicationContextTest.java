@@ -4,17 +4,16 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
 import org.junit.Test;
 
-import com.yx.myspring.TestYX;
 import com.yx.myspring.context.ApplicationContext;
 import com.yx.myspring.context.support.ClassPathXmlApplicationContext;
 import com.yx.myspring.context.support.FileSystemXmlApplicationContext;
 import com.yx.myspring.context.support.UrlXmlApplicationContext;
+import com.yx.myspring.service.v1.TestYX;
 
 public class ApplicationContextTest {
 
@@ -50,7 +49,6 @@ public class ApplicationContextTest {
 			methodSet.invoke(useryx, "testExternalApplicationContext:	yxtest");
 			methodSay.invoke(useryx);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

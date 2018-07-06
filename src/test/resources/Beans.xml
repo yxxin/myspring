@@ -3,6 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<bean id="testyx" class="com.yx.myspring.TestYX"></bean>
-	<bean id="testyx2" class="com.yx.myspring.TestYX" scope="prototype"></bean>
+	<bean id="testyx" class="com.yx.myspring.service.v1.TestYX"></bean>
+	<bean id="testyx2" class="com.yx.myspring.service.v1.TestYX" scope="prototype"></bean>
 </beans>

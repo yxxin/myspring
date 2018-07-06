@@ -1,5 +1,7 @@
 package com.yx.myspring.beans;
 
+import java.util.List;
+
 public interface BeanDefinition {
 	public String getBeanClassName();
 	//增加scope属性，单利和原型
@@ -9,4 +11,5 @@ public interface BeanDefinition {
 	public String getScope();
 	public boolean isSingleton();
 	public boolean isPrototype();
+	List<PropertyValue> getPropertyValues();
 }

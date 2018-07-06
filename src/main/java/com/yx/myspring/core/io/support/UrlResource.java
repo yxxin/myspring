@@ -18,7 +18,6 @@ public class UrlResource implements Resource {
 		try {
 			this.url=new URL(path);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

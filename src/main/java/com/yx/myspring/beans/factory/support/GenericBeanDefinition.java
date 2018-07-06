@@ -1,12 +1,17 @@
 package com.yx.myspring.beans.factory.support;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.yx.myspring.beans.BeanDefinition;
+import com.yx.myspring.beans.PropertyValue;
 
 public class GenericBeanDefinition implements BeanDefinition {
 	private String beanID;
 	private String className;
 	private String scope=SCOPE_DEFAULT;
 	private static final String SCOPE_DEFAULT="";
+	private List<PropertyValue> propertyValues=new ArrayList<PropertyValue>();
 	
 	public GenericBeanDefinition(String beanID, String className) {
 		this.beanID = beanID;
@@ -31,6 +36,10 @@ public class GenericBeanDefinition implements BeanDefinition {
 
 	public boolean isPrototype() {
 		return SCOPE_PROTOTYPE.equals(this.scope);
+	}
+
+	public List<PropertyValue> getPropertyValues() {
+		return this.propertyValues;
 	}
 
 }

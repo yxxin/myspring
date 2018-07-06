@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="yx1" class="com.yx.myspring.service.v2.TestYX">
+		<property name="accountDao" ref="accountDao"></property>
+		<property name="itemDao" ref="itemDao"></property>
+		<property name="name" value="yx"></property>
+		<property name="num" value="1"></property>
+	</bean>
+	<bean id="accountDao" class="com.yx.myspring.dao.v2.AccountDao"></bean>
+	<bean id="itemDao" class="com.yx.myspring.dao.v2.ItemDao"></bean>
+</beans>
