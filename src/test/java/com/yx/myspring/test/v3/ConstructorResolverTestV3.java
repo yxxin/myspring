@@ -27,7 +27,8 @@ public class ConstructorResolverTestV3 {
 		assertNotNull(yx.getAccountDao());
 		assertNotNull(yx.getItemDao());
 		assertEquals("yx", yx.getName());
-		assertEquals(28, yx.getNum());
+		assertEquals("28", yx.getName2());
+		assertEquals(0, yx.getNum());
 	}
 	
 }

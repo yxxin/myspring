@@ -7,6 +7,7 @@ public class TestYX {
 	private AccountDao accountDao;
 	private ItemDao itemDao;
 	private String name;
+	private String name2;
 	private int num;
 
 	public TestYX(AccountDao accountDao, ItemDao itemDao, String name, int num) {
@@ -15,6 +16,13 @@ public class TestYX {
 		this.name = name;
 		this.num = num;
 	}
+	public TestYX(AccountDao accountDao, ItemDao itemDao, String name, String name2) {
+		this.accountDao = accountDao;
+		this.itemDao = itemDao;
+		this.name = name;
+		this.name2 = name2;
+	}
+	
 
 	public AccountDao getAccountDao() {
 		return accountDao;
@@ -26,6 +34,10 @@ public class TestYX {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getName2() {
+		return name2;
 	}
 
 	public int getNum() {

@@ -4,6 +4,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.yx.myspring.dao.v3.AccountDao;
+import com.yx.myspring.dao.v3.ItemDao;
+
 @RunWith(Suite.class)
 @SuiteClasses({ ApplicationContextTestV3.class, BeanDefinitionTestV3.class, ConstructorResolverTestV3.class })
 public class V3AllTests {
@@ -13,7 +16,9 @@ public class V3AllTests {
 	//2.新建ConstructorResolver类，调用autowriteConstructor(BeanDefinition bd)从bd中获取构造类。
 	//	使用ConstructorResolverTestV3测试此类。
 	//	a.testAutowireConstructor()用来测试普通属性。
-	//	选择最优构造方法。
+	//	b.选择最优构造方法。新增TestYX(AccountDao accountDao, ItemDao itemDao, String name, String name2)
+	//		目前选择的是TestYX(AccountDao accountDao, ItemDao itemDao, String name, int num)，
+	//		而实际新增的构造方法匹配度更高。新增后测试用例报错，修改ConstructorResolver选择最优构造方法，让测试用例通过。
 	//	新增index属性。
 	//	新增type属性。
 	//	新增name属性，jdk本身不支持获取方法参数名字，后续引入asm才行。

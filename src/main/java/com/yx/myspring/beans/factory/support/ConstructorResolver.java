@@ -9,6 +9,7 @@ import com.yx.myspring.beans.ConstructorArgument.ValueHolder;
 import com.yx.myspring.beans.SimpleTypeConvert;
 import com.yx.myspring.beans.factory.BeanCreateException;
 import com.yx.myspring.beans.factory.config.ConfigurableBeanFactory;
+import com.yx.myspring.util.ClassUtils;
 
 public class ConstructorResolver {
 	private ConfigurableBeanFactory factory;
@@ -31,16 +32,22 @@ public class ConstructorResolver {
 		BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this.factory);
 		SimpleTypeConvert convert = new SimpleTypeConvert();
 		Constructor<?>[] constructors = beanClass.getConstructors();
+
+		int weight = 0;
 		for (int i = 0; i < constructors.length; i++) {
 			Class<?>[] parameterTypes = constructors[i].getParameterTypes();
 			if (parameterTypes.length != valueHolders.size()) {
 				continue;
 			}
-			argsToUse = new Object[parameterTypes.length];
-			boolean results = valuesMatchTypes(argsToUse, valueHolders, resolver, convert, parameterTypes);
-			if (results) {
+			if (argsToUse == null) {
+				argsToUse = new Object[parameterTypes.length];
+			}
+			Object[] returnArgs = new Object[parameterTypes.length];
+			int results = valuesMatchTypes(returnArgs, valueHolders, resolver, convert, parameterTypes);
+			if (results != -1 && (constructorToUse == null || weight < results)) {
 				constructorToUse = constructors[i];
-				break;
+				argsToUse = returnArgs;
+				weight = results;
 			}
 		}
 		if (constructorToUse == null) {
@@ -53,21 +60,27 @@ public class ConstructorResolver {
 		}
 	}
 
-	private boolean valuesMatchTypes(Object[] argsToUse, List<ValueHolder> valueHolders,
+	private int valuesMatchTypes(Object[] argsToUse, List<ValueHolder> valueHolders,
 			BeanDefinitionValueResolver resolver, SimpleTypeConvert convert, Class<?>[] parameterTypes) {
+		int weight = 0;
 		for (int i = 0; i < parameterTypes.length; i++) {
 			ValueHolder valueHolder = valueHolders.get(i);
 			if (valueHolder != null) {
 				try {
 					Object resolvedValue = resolver.resolveValueIfNecessary(valueHolder.getValue());
-					argsToUse[i] = convert.convertIfNecessary(resolvedValue, parameterTypes[i]);
+					if (ClassUtils.isAssignableValue(parameterTypes[i], resolvedValue)) {
+						weight++;
+						argsToUse[i] = resolvedValue;
+					} else {
+						argsToUse[i] = convert.convertIfNecessary(resolvedValue, parameterTypes[i]);
+					}
 				} catch (Exception e) {
-					return false;
+					return -1;
 				}
 			} else {
-				return false;
+				return -1;
 			}
 		}
-		return true;
+		return weight;
 	}
 }

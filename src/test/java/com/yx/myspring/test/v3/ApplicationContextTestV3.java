@@ -18,7 +18,7 @@ public class ApplicationContextTestV3 {
 		assertNotNull(yx.getAccountDao());
 		assertNotNull(yx.getItemDao());
 		assertEquals("yx", yx.getName());
-		assertEquals(28, yx.getNum());
+		assertEquals("28", yx.getName2());
 	}
 
 }
