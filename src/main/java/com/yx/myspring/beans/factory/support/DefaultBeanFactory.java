@@ -23,6 +23,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 	
 	private Map<String,BeanDefinition> beanDefinitionMap=new ConcurrentHashMap<String,BeanDefinition>(64);
 	private ClassLoader classLoader;
+	private ConstructorResolver resolver=new ConstructorResolver(this);
 	
 	public BeanDefinition getBeanDefinition(String beanID) {
 		return this.beanDefinitionMap.get(beanID);
@@ -55,13 +56,17 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 	}
 
 	private Object instanceBean(BeanDefinition bd) {
-		String className=bd.getBeanClassName();
-		ClassLoader cl= this.getBeanClassLoader();
-		try {
-			Class<?> clz= cl.loadClass(className);
-			return clz.newInstance();
-		} catch (Exception e) {
-			throw new BeanCreateException("created bean "+className+" failed",e);
+		if(bd.getConstructorArgument().getArugmentCount()>0) {
+			return resolver.autowireConstructor(bd);
+		}else {
+			String className=bd.getBeanClassName();
+			ClassLoader cl= this.getBeanClassLoader();
+			try {
+				Class<?> clz= cl.loadClass(className);
+				return clz.newInstance();
+			} catch (Exception e) {
+				throw new BeanCreateException("created bean "+className+" failed",e);
+			}
 		}
 	}
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yx.myspring.beans.BeanDefinition;
+import com.yx.myspring.beans.ConstructorArgument;
 import com.yx.myspring.beans.PropertyValue;
 
 public class GenericBeanDefinition implements BeanDefinition {
@@ -12,6 +13,7 @@ public class GenericBeanDefinition implements BeanDefinition {
 	private String scope=SCOPE_DEFAULT;
 	private static final String SCOPE_DEFAULT="";
 	private List<PropertyValue> propertyValues=new ArrayList<PropertyValue>();
+	private ConstructorArgument constructorArgument=new ConstructorArgument();
 	
 	public GenericBeanDefinition(String beanID, String className) {
 		this.beanID = beanID;
@@ -40,6 +42,14 @@ public class GenericBeanDefinition implements BeanDefinition {
 
 	public List<PropertyValue> getPropertyValues() {
 		return this.propertyValues;
+	}
+
+	public ConstructorArgument getConstructorArgument() {
+		return this.constructorArgument;
+	}
+
+	public String getID() {
+		return this.beanID;
 	}
 
 }

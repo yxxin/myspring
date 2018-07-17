@@ -11,5 +11,9 @@ public interface BeanDefinition {
 	public String getScope();
 	public boolean isSingleton();
 	public boolean isPrototype();
+	//用来存放属性注入的结构
 	List<PropertyValue> getPropertyValues();
+	//用来存放构造注入的结构
+	ConstructorArgument getConstructorArgument();
+	String getID();
 }

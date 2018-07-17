@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="yx1" class="com.yx.myspring.service.v3.TestYX">
+		<constructor-arg ref="accountDao"/>
+		<constructor-arg ref="itemDao"/>
+		<constructor-arg value="yx"/>
+		<constructor-arg value="28"/>
+	</bean>
+	<bean id="accountDao" class="com.yx.myspring.dao.v3.AccountDao"></bean>
+	<bean id="itemDao" class="com.yx.myspring.dao.v3.ItemDao"></bean>
+
+</beans>
