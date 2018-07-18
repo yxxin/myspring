@@ -42,4 +42,24 @@ public class ConstructorResolverTestV3 {
 		assertEquals("28", yx.getName());
 		assertEquals("yx2", yx.getName2());
 	}
+	@Test
+	public void testAutowireConstructorType() {
+		BeanDefinition bd=factory.getBeanDefinition("yx4");
+		ConstructorResolver resolver=new ConstructorResolver(factory);
+		TestYX yx=(TestYX)resolver.autowireConstructor(bd);
+		assertNotNull(yx.getAccountDao());
+		assertNotNull(yx.getItemDao());
+		assertEquals("yx4", yx.getName());
+		assertEquals(28, yx.getNum());
+	}
+	@Test
+	public void testAutowireConstructorIndexAndType() {
+		BeanDefinition bd=factory.getBeanDefinition("yx5");
+		ConstructorResolver resolver=new ConstructorResolver(factory);
+		TestYX yx=(TestYX)resolver.autowireConstructor(bd);
+		assertNotNull(yx.getAccountDao());
+		assertNotNull(yx.getItemDao());
+		assertEquals("yx5", yx.getName());
+		assertEquals(28, yx.getNum());
+	}
 }

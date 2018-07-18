@@ -24,6 +24,8 @@ public class V3AllTests {
 	//		(1)异常测试（index属性重复的问题，负数问题，非数字问题，超过了参数个数问题）：BeansV3.xml中的yx3。
 	//		(2)ConstructorArgument中argumentValues，indexArgumentValues增加获取单个ValueHolder的方法。以及一个getValueHolder方法。
 	//			ConstructorResolver中获取ValueHolder的方式也改下。
-	//	新增type属性。
-	//	新增name属性，jdk本身不支持获取方法参数名字，后续引入asm才行。
+	//	d.新增type属性。
+	//		使用testAutowireConstructorType()单独测试type属性。
+	//		使用testAutowireConstructorIndexAndType()测试index和type一起使用。
+	//	新增name属性，jdk本身获取方法参数名字不准确，后续引入asm才行。
 }

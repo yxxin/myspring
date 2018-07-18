@@ -31,4 +31,17 @@
 		<!-- <constructor-arg index="2" value="yx2"/> 异常：重复的index-->
 		<!-- <constructor-arg index="4" value="28"/> 异常：index索引超过了构造参数个数 -->
 	</bean>
+	
+	<bean id="yx4" class="com.yx.myspring.service.v3.TestYX">
+		<constructor-arg ref="accountDao"/>
+		<constructor-arg ref="itemDao"/>
+		<constructor-arg type="java.lang.String" value="yx4"/>
+		<constructor-arg type="int" value="28"/>
+	</bean>
+	<bean id="yx5" class="com.yx.myspring.service.v3.TestYX">
+		<constructor-arg ref="accountDao"/>
+		<constructor-arg ref="itemDao"/>
+		<constructor-arg type="java.lang.String" value="yx5"/>
+		<constructor-arg index="3" type="int" value="28"/>
+	</bean>
 </beans>
