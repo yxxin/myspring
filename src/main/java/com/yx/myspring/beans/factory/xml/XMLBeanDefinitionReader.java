@@ -2,7 +2,9 @@ package com.yx.myspring.beans.factory.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,6 +13,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.yx.myspring.beans.BeanDefinition;
+import com.yx.myspring.beans.ConstructorArgument;
 import com.yx.myspring.beans.ConstructorArgument.ValueHolder;
 import com.yx.myspring.beans.PropertyValue;
 import com.yx.myspring.beans.factory.BeanDefinitionException;
@@ -67,20 +70,58 @@ public class XMLBeanDefinitionReader {
 			Element conEle= (Element)iter.next();
 			parseConstructorArgElement(conEle,bd);
 		}
+		checkConstructorArgIndex(bd);
 	}
 	private void parseConstructorArgElement(Element conEle, BeanDefinition bd) {
 		String typeAttr=conEle.attributeValue(BeanDefinitionParser.TYPE_ATTRIBUTE);
 		String nameAttr=conEle.attributeValue(BeanDefinitionParser.NAME_ATTRIBUTE);
 		String indexAttr=conEle.attributeValue(BeanDefinitionParser.INDEX_ATTRIBUTE);
-		Object val=parsePropertyValue(conEle,null);
-		ValueHolder valueHolder = new ValueHolder(val);
-		if(StringUtils.hasText(typeAttr)) {
-			valueHolder.setType(typeAttr);
+		ConstructorArgument args=bd.getConstructorArgument();
+		
+		if(StringUtils.hasText(indexAttr)) {
+			int index=0;
+			try {
+				index=Integer.parseInt(indexAttr);
+			}catch(Exception e) {
+				throw new RuntimeException("Attribute 'index' of tag 'constructor-arg' must be an integer");
+			}
+			if(index<0) {
+				throw new RuntimeException("'index' cannot be lower than 0");
+			}
+			if(args.hasIndexArgumentValues(index)) {
+				throw new RuntimeException("Ambiguous constructor-arg entries for index " + index);
+			}
+			Object val=parsePropertyValue(conEle,null);
+			ValueHolder valueHolder = new ValueHolder(val);
+			if(StringUtils.hasText(typeAttr)) {
+				valueHolder.setType(typeAttr);
+			}
+			if(StringUtils.hasText(nameAttr)) {
+				valueHolder.setName(nameAttr);
+			}
+			args.addIndexArgumentValue(index, valueHolder);
+		}else {
+			Object val=parsePropertyValue(conEle,null);
+			ValueHolder valueHolder = new ValueHolder(val);
+			if(StringUtils.hasText(typeAttr)) {
+				valueHolder.setType(typeAttr);
+			}
+			if(StringUtils.hasText(nameAttr)) {
+				valueHolder.setName(nameAttr);
+			}
+			args.addArgumentValue(valueHolder);
 		}
-		if(StringUtils.hasText(nameAttr)) {
-			valueHolder.setName(nameAttr);
+	}
+	private void checkConstructorArgIndex(BeanDefinition bd) {
+		Set<Integer> indexs= bd.getConstructorArgument().getIndexArgumentValues().keySet();
+		if(indexs==null || indexs.isEmpty()) {
+			return;
 		}
-		bd.getConstructorArgument().addArgumentValue(valueHolder);
+		Object[] obj = indexs.toArray();
+		Arrays.sort(obj);
+		if(((Integer)obj[obj.length-1]+1) > bd.getConstructorArgument().getValueHoldersCount()) {
+			throw new RuntimeException("配置构造参数个数"+bd.getConstructorArgument().getValueHoldersCount()+" �����������ƥ��"+obj[obj.length - 1] );
+		}
 	}
 	
 	private void parsePropertyElement(Element beanEle, BeanDefinition bd) {

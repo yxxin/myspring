@@ -1,7 +1,8 @@
 package com.yx.myspring.beans.factory.support;
 
 import java.lang.reflect.Constructor;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.yx.myspring.beans.BeanDefinition;
 import com.yx.myspring.beans.ConstructorArgument;
@@ -28,7 +29,6 @@ public class ConstructorResolver {
 			throw new BeanCreateException(bd.getID(), "Instantiation of bean failed, can't resolve class", e);
 		}
 		ConstructorArgument args = bd.getConstructorArgument();
-		List<ValueHolder> valueHolders = args.getArgumentValues();
 		BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this.factory);
 		SimpleTypeConvert convert = new SimpleTypeConvert();
 		Constructor<?>[] constructors = beanClass.getConstructors();
@@ -36,14 +36,14 @@ public class ConstructorResolver {
 		int weight = 0;
 		for (int i = 0; i < constructors.length; i++) {
 			Class<?>[] parameterTypes = constructors[i].getParameterTypes();
-			if (parameterTypes.length != valueHolders.size()) {
+			if (parameterTypes.length != args.getValueHoldersCount()) {
 				continue;
 			}
 			if (argsToUse == null) {
 				argsToUse = new Object[parameterTypes.length];
 			}
 			Object[] returnArgs = new Object[parameterTypes.length];
-			int results = valuesMatchTypes(returnArgs, valueHolders, resolver, convert, parameterTypes);
+			int results = valuesMatchTypes(returnArgs, args, resolver, convert, parameterTypes);
 			if (results != -1 && (constructorToUse == null || weight < results)) {
 				constructorToUse = constructors[i];
 				argsToUse = returnArgs;
@@ -60,12 +60,17 @@ public class ConstructorResolver {
 		}
 	}
 
-	private int valuesMatchTypes(Object[] argsToUse, List<ValueHolder> valueHolders,
+	private int valuesMatchTypes(Object[] argsToUse, ConstructorArgument args,
 			BeanDefinitionValueResolver resolver, SimpleTypeConvert convert, Class<?>[] parameterTypes) {
 		int weight = 0;
+		Set<ValueHolder> usedValueHolders=new HashSet<ValueHolder>(parameterTypes.length);
 		for (int i = 0; i < parameterTypes.length; i++) {
-			ValueHolder valueHolder = valueHolders.get(i);
+			ValueHolder valueHolder = args.getValueHolder(i, parameterTypes[i], usedValueHolders);
+			if(valueHolder == null) {
+				valueHolder = args.getArgumentValue(null, usedValueHolders);
+			}
 			if (valueHolder != null) {
+				usedValueHolders.add(valueHolder);
 				try {
 					Object resolvedValue = resolver.resolveValueIfNecessary(valueHolder.getValue());
 					if (ClassUtils.isAssignableValue(parameterTypes[i], resolvedValue)) {

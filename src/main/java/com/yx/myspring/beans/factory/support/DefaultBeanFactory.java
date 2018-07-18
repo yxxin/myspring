@@ -56,7 +56,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 	}
 
 	private Object instanceBean(BeanDefinition bd) {
-		if(bd.getConstructorArgument().getArugmentCount()>0) {
+		if(!bd.getConstructorArgument().isEmpty()) {
 			return resolver.autowireConstructor(bd);
 		}else {
 			String className=bd.getBeanClassName();
@@ -84,7 +84,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 				Object resolvedValue=resolver.resolveValueIfNecessary(originalValue);
 				
 				invokeMethod(bean, convert, propertyName, resolvedValue);
-				//Ê¹ÓÃcommon-beanutilsÀ´ÉèÖÃÊôĞÔ
+				//ä½¿ç”¨common-beanutilsæ¥è®¾ç½®å±æ€§
 //				BeanUtils.setProperty(bean, propertyName, resolvedValue);
 			}
 		}catch(Exception ex){
@@ -94,13 +94,13 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 
 	private void invokeMethod(Object bean, SimpleTypeConvert convert, String propertyName, Object resolvedValue)
 			throws IntrospectionException, IllegalAccessException, InvocationTargetException {
-		// TODO ÕâÀïÊ¹ÓÃÁËjavabean,springÖĞÊ¹ÓÃµÄÊÇÊ²Ã´ÄØ£¿
+		// TODO è¿™é‡Œä½¿ç”¨äº†javabean,springä¸­ä½¿ç”¨çš„æ˜¯ä»€ä¹ˆå‘¢ï¼Ÿ
 		BeanInfo info=Introspector.getBeanInfo(bean.getClass());
 		PropertyDescriptor[] pds=info.getPropertyDescriptors();
 		for(PropertyDescriptor pd:pds) {
 			if(pd.getName().equals(propertyName)) {
 				Object convertedValue = convert.convertIfNecessary(resolvedValue, pd.getPropertyType());
-				// TODO springÔ´ÂëÖĞ²»ÊÇµ±³¡¾ÍÊÇ×¢Èë½øÈ¥µÄ£¬Ã²ËÆÊÇ·Åµ½PropertyValueÖĞµÄ×ª»»¶ÔÏóÖĞ£¬ÔõÃ´ÓÃµ½»¹´ı¿´£¿
+				// TODO springæºç ä¸­ä¸æ˜¯å½“åœºå°±æ˜¯æ³¨å…¥è¿›å»çš„ï¼Œè²Œä¼¼æ˜¯æ”¾åˆ°PropertyValueä¸­çš„è½¬æ¢å¯¹è±¡ä¸­ï¼Œæ€ä¹ˆç”¨åˆ°è¿˜å¾…çœ‹ï¼Ÿ
 				pd.getWriteMethod().invoke(bean, convertedValue);
 				break;
 			}

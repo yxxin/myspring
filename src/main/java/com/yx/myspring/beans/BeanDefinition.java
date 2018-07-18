@@ -4,16 +4,16 @@ import java.util.List;
 
 public interface BeanDefinition {
 	public String getBeanClassName();
-	//Ôö¼ÓscopeÊôĞÔ£¬µ¥ÀûºÍÔ­ĞÍ
+	//å¢åŠ scopeå±æ€§ï¼Œå•åˆ©å’ŒåŸå‹
 	public static final String SCOPE_SINGLETON="singleton";
 	public static final String SCOPE_PROTOTYPE="prototype";
 	public void setScope(String scope);
 	public String getScope();
 	public boolean isSingleton();
 	public boolean isPrototype();
-	//ÓÃÀ´´æ·ÅÊôĞÔ×¢ÈëµÄ½á¹¹
+	//ç”¨æ¥å­˜æ”¾å±æ€§æ³¨å…¥çš„ç»“æ„
 	List<PropertyValue> getPropertyValues();
-	//ÓÃÀ´´æ·Å¹¹Ôì×¢ÈëµÄ½á¹¹
+	//ç”¨æ¥å­˜æ”¾æ„é€ æ³¨å…¥çš„ç»“æ„
 	ConstructorArgument getConstructorArgument();
 	String getID();
 }

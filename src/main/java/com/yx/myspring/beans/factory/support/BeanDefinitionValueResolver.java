@@ -12,11 +12,11 @@ public class BeanDefinitionValueResolver {
 	}
 	
 	public Object resolveValueIfNecessary(Object value) {
-		// TODO Ä¿Ç°Ö»Ö§³ÖÁ½ÖÖ
+		// TODO ç›®å‰åªæ”¯æŒä¸¤ç§
 		if(value instanceof RuntimeBeanReference) {
 			RuntimeBeanReference ref=(RuntimeBeanReference)value;
 			String beanName=ref.getBeanName();
-			//TODO getBeanÕâÀïÓĞ¸öÑ­»·ÒıÓÃµÄÎÊÌâ
+			//TODO getBeanè¿™é‡Œæœ‰ä¸ªå¾ªç¯å¼•ç”¨çš„é—®é¢˜
 			return this.factory.getBean(beanName);
 		}else if(value instanceof TypedStringValue) {
 			return ((TypedStringValue)value).getValue();

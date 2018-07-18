@@ -13,4 +13,22 @@
 	<bean id="accountDao" class="com.yx.myspring.dao.v3.AccountDao"></bean>
 	<bean id="itemDao" class="com.yx.myspring.dao.v3.ItemDao"></bean>
 
+	<bean id="yx2" class="com.yx.myspring.service.v3.TestYX">
+		<constructor-arg ref="accountDao"/>
+		<constructor-arg ref="itemDao"/>
+		<constructor-arg value="yx2"/>
+		<constructor-arg index="2" value="28"/>
+	</bean>
+	
+	<!-- 异常测试 -->
+	<bean id="yx3" class="com.yx.myspring.service.v3.TestYX">
+		<constructor-arg ref="accountDao"/>
+		<constructor-arg ref="itemDao"/>
+		<constructor-arg value="yx2"/>
+		<!-- <constructor-arg index="str" value="28"/> 异常：需要是数字-->
+		<!-- <constructor-arg index="-1" value="28"/> 异常：不能小于0-->
+		<constructor-arg index="2" value="28"/>
+		<!-- <constructor-arg index="2" value="yx2"/> 异常：重复的index-->
+		<!-- <constructor-arg index="4" value="28"/> 异常：index索引超过了构造参数个数 -->
+	</bean>
 </beans>

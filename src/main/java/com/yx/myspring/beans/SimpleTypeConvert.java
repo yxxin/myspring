@@ -18,12 +18,12 @@ public class SimpleTypeConvert implements TypeConverter {
 	
 	@SuppressWarnings("unchecked")
 	public <T> T convertIfNecessary(Object value, Class<T> requireType) {
-		//Èç¹ûrequireTypeºÍvalueÊÇÏàÍ¬ÀàĞÍ»òÕßÊÇËüµÄ³¬Àà£¬ÔòÖ±½Ó·µ»Ø£¬ÀàĞÍ×ª»»Ò»ÏÂ¼´¿É¡£
-		//Èç¹ûÁ½¸ö¶¼ÊÇÏàÍ¬µÄ»ù±¾ÀàĞÍ»òÕß°ü×°ÀàÍ¬ÉÏ´¦Àí¡£
+		//å¦‚æœrequireTypeå’Œvalueæ˜¯ç›¸åŒç±»å‹æˆ–è€…æ˜¯å®ƒçš„è¶…ç±»ï¼Œåˆ™ç›´æ¥è¿”å›ï¼Œç±»å‹è½¬æ¢ä¸€ä¸‹å³å¯ã€‚
+		//å¦‚æœä¸¤ä¸ªéƒ½æ˜¯ç›¸åŒçš„åŸºæœ¬ç±»å‹æˆ–è€…åŒ…è£…ç±»åŒä¸Šå¤„ç†ã€‚
 		if(ClassUtils.isAssignableValue(requireType, value)) {
 			return (T)value;
 		}else {
-			// TODO Ö»Ö§³Östring
+			// TODO åªæ”¯æŒstring
 			if(value instanceof String) {
 				return (T)typeStringConvert((String)value,requireType);
 			}else {
@@ -33,7 +33,7 @@ public class SimpleTypeConvert implements TypeConverter {
 	}
 	
 	public static Object typeStringConvert(String value, Class requireType) {
-		// TODO ×ª»»²»ºÃ£¬´ı¸Ä½ø
+		// TODO è½¬æ¢ä¸å¥½ï¼Œå¾…æ”¹è¿›
 		if(requireType == int.class || requireType == Integer.class) {
 			return Integer.parseInt(value);
 		}

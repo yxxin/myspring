@@ -10,16 +10,20 @@ import com.yx.myspring.dao.v3.ItemDao;
 @RunWith(Suite.class)
 @SuiteClasses({ ApplicationContextTestV3.class, BeanDefinitionTestV3.class, ConstructorResolverTestV3.class })
 public class V3AllTests {
-	//0.×îÖÕÄ¿µÄ£ºApplicationContextTestV3²âÊÔcontext
-	//1.ÏÈĞèÒªXMLBeanDefinitionReaderÖĞ½âÎöÏàÓ¦µÄ½áµã£¬±£´æ¡£Ê¹ÓÃBeanDefinitionTestV3²âÊÔ
-	//	a.Ê¹ÓÃConstructorArgumentÀ´´æ·Å¡£BeanDefinitionÖĞÔö¼ÓgetConstructorArgument()·½·¨¡£
-	//2.ĞÂ½¨ConstructorResolverÀà£¬µ÷ÓÃautowriteConstructor(BeanDefinition bd)´ÓbdÖĞ»ñÈ¡¹¹ÔìÀà¡£
-	//	Ê¹ÓÃConstructorResolverTestV3²âÊÔ´ËÀà¡£
-	//	a.testAutowireConstructor()ÓÃÀ´²âÊÔÆÕÍ¨ÊôĞÔ¡£
-	//	b.Ñ¡Ôñ×îÓÅ¹¹Ôì·½·¨¡£ĞÂÔöTestYX(AccountDao accountDao, ItemDao itemDao, String name, String name2)
-	//		Ä¿Ç°Ñ¡ÔñµÄÊÇTestYX(AccountDao accountDao, ItemDao itemDao, String name, int num)£¬
-	//		¶øÊµ¼ÊĞÂÔöµÄ¹¹Ôì·½·¨Æ¥Åä¶È¸ü¸ß¡£ĞÂÔöºó²âÊÔÓÃÀı±¨´í£¬ĞŞ¸ÄConstructorResolverÑ¡Ôñ×îÓÅ¹¹Ôì·½·¨£¬ÈÃ²âÊÔÓÃÀıÍ¨¹ı¡£
-	//	ĞÂÔöindexÊôĞÔ¡£
-	//	ĞÂÔötypeÊôĞÔ¡£
-	//	ĞÂÔönameÊôĞÔ£¬jdk±¾Éí²»Ö§³Ö»ñÈ¡·½·¨²ÎÊıÃû×Ö£¬ºóĞøÒıÈëasm²ÅĞĞ¡£
+	//0.æœ€ç»ˆç›®çš„ï¼šApplicationContextTestV3æµ‹è¯•context
+	//1.å…ˆéœ€è¦XMLBeanDefinitionReaderä¸­è§£æç›¸åº”çš„ç»“ç‚¹ï¼Œä¿å­˜ã€‚ä½¿ç”¨BeanDefinitionTestV3æµ‹è¯•
+	//	a.ä½¿ç”¨ConstructorArgumentæ¥å­˜æ”¾ã€‚BeanDefinitionä¸­å¢åŠ getConstructorArgument()æ–¹æ³•ã€‚
+	//2.æ–°å»ºConstructorResolverç±»ï¼Œè°ƒç”¨autowriteConstructor(BeanDefinition bd)ä»bdä¸­è·å–æ„é€ ç±»ã€‚
+	//	ä½¿ç”¨ConstructorResolverTestV3æµ‹è¯•æ­¤ç±»ã€‚
+	//	a.testAutowireConstructor()ç”¨æ¥æµ‹è¯•æ™®é€šå±æ€§ã€‚
+	//	b.é€‰æ‹©æœ€ä¼˜æ„é€ æ–¹æ³•ã€‚æ–°å¢TestYX(AccountDao accountDao, ItemDao itemDao, String name, String name2)
+	//		ç›®å‰é€‰æ‹©çš„æ˜¯TestYX(AccountDao accountDao, ItemDao itemDao, String name, int num)ï¼Œ
+	//		è€Œå®é™…æ–°å¢çš„æ„é€ æ–¹æ³•åŒ¹é…åº¦æ›´é«˜ã€‚æ–°å¢åæµ‹è¯•ç”¨ä¾‹æŠ¥é”™ï¼Œä¿®æ”¹ConstructorResolveré€‰æ‹©æœ€ä¼˜æ„é€ æ–¹æ³•ï¼Œè®©æµ‹è¯•ç”¨ä¾‹é€šè¿‡ã€‚
+	//	c.æ–°å¢indexå±æ€§ã€‚ä½¿ç”¨testAutowireConstrutorIndex()æµ‹è¯•ã€‚
+	//		é—®é¢˜ï¼šindexå±æ€§é‡å¤çš„é—®é¢˜ï¼Œè´Ÿæ•°é—®é¢˜ï¼Œéæ•°å­—é—®é¢˜ï¼Œè¶…è¿‡äº†å‚æ•°ä¸ªæ•°é—®é¢˜ã€‚ConstructorArgumentæ–°å¢indexç›¸å…³çš„mapã€‚
+	//		(1)å¼‚å¸¸æµ‹è¯•ï¼ˆindexå±æ€§é‡å¤çš„é—®é¢˜ï¼Œè´Ÿæ•°é—®é¢˜ï¼Œéæ•°å­—é—®é¢˜ï¼Œè¶…è¿‡äº†å‚æ•°ä¸ªæ•°é—®é¢˜ï¼‰ï¼šBeansV3.xmlä¸­çš„yx3ã€‚
+	//		(2)ConstructorArgumentä¸­argumentValuesï¼ŒindexArgumentValueså¢åŠ è·å–å•ä¸ªValueHolderçš„æ–¹æ³•ã€‚ä»¥åŠä¸€ä¸ªgetValueHolderæ–¹æ³•ã€‚
+	//			ConstructorResolverä¸­è·å–ValueHolderçš„æ–¹å¼ä¹Ÿæ”¹ä¸‹ã€‚
+	//	æ–°å¢typeå±æ€§ã€‚
+	//	æ–°å¢nameå±æ€§ï¼Œjdkæœ¬èº«ä¸æ”¯æŒè·å–æ–¹æ³•å‚æ•°åå­—ï¼Œåç»­å¼•å…¥asmæ‰è¡Œã€‚
 }

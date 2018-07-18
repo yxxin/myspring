@@ -27,7 +27,7 @@ public class BeanDefinitionTestV3 {
 		assertEquals("com.yx.myspring.service.v3.TestYX", bd.getBeanClassName());
 		ConstructorArgument args=bd.getConstructorArgument();
 		List<ValueHolder> valueHolders=args.getArgumentValues();
-		assertEquals(4, args.getArugmentCount());
+		assertEquals(4, args.getValueHoldersCount());
 		RuntimeBeanReference ref1=(RuntimeBeanReference)valueHolders.get(0).getValue();
 		assertEquals("accountDao", ref1.getBeanName());
 		RuntimeBeanReference ref2=(RuntimeBeanReference)valueHolders.get(1).getValue();
