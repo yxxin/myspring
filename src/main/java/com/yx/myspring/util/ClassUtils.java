@@ -5,6 +5,9 @@ import java.util.Map;
 
 public abstract class ClassUtils {
 	public static final String ARRAY_SUFFIX = "[]";
+	public static final char PACKAGE_SEPARATOR = '.';
+	public static final char PATH_SEPARATOR = '/';
+	private static final char INNER_CLASS_SEPARATOR = '$';
 	private static final Map<Class<?>, Class<?>> wrapperToPrimitiveTypeMap = new HashMap<Class<?>, Class<?>>(8);
 	private static final Map<Class<?>, Class<?>> primitiveTypeToWrapperMap = new HashMap<Class<?>, Class<?>>(8);
 	static {
@@ -70,5 +73,20 @@ public abstract class ClassUtils {
 		}
 		result.insert(0, type.getName());
 		return result.toString();
+	}
+	
+	public static String convertClassNameToResourcePath(String className) {
+		Assert.notNull(className, "ClassName must not be null");
+		return className.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
+	}
+	public static String convertResourcePathToClassName(String resourcePath) {
+		Assert.notNull(resourcePath, "Resource Path must not be null");
+		return resourcePath.replace(PATH_SEPARATOR, PACKAGE_SEPARATOR);
+	}
+	public static String getShortName(String className) {
+		int lastIndex=className.lastIndexOf(PACKAGE_SEPARATOR);
+		String shortName=className.substring(lastIndex+1, className.length());
+		shortName=shortName.replace(INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
+		return shortName;
 	}
 }

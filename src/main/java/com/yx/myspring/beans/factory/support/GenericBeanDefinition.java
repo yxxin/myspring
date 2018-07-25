@@ -20,8 +20,14 @@ public class GenericBeanDefinition implements BeanDefinition {
 		this.className = className;
 	}
 
+	public GenericBeanDefinition() {
+	}
+
 	public String getBeanClassName() {
 		return this.className;
+	}
+	public void setBeanClassName(String className) {
+		this.className=className;
 	}
 
 	public void setScope(String scope) {
@@ -50,6 +56,9 @@ public class GenericBeanDefinition implements BeanDefinition {
 
 	public String getID() {
 		return this.beanID;
+	}
+	public void setID(String beanID) {
+		this.beanID = beanID;
 	}
 
 }

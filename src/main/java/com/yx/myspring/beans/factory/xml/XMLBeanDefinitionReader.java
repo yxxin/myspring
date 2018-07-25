@@ -21,6 +21,7 @@ import com.yx.myspring.beans.factory.config.RuntimeBeanReference;
 import com.yx.myspring.beans.factory.config.TypedStringValue;
 import com.yx.myspring.beans.factory.support.BeanDefinitionRegistry;
 import com.yx.myspring.beans.factory.support.GenericBeanDefinition;
+import com.yx.myspring.context.annotation.ClassPathBeanDefinitionScanner;
 import com.yx.myspring.core.io.Resource;
 import com.yx.myspring.util.StringUtils;
 
@@ -40,16 +41,13 @@ public class XMLBeanDefinitionReader {
 			Iterator<Element> iter=note.elementIterator();
 			while(iter.hasNext()) {
 				Element ele=iter.next();
-				String id=ele.attributeValue(BeanDefinitionParser.ID_ATTRIBUTE);
-				String className=ele.attributeValue(BeanDefinitionParser.CLASS_ATTRIBUTE);
-				String scope=ele.attributeValue(BeanDefinitionParser.SCOPE_ATTRIBUTE);
-				BeanDefinition bd=new GenericBeanDefinition(id, className);
-				if(scope!=null) {
-					bd.setScope(scope);
+				
+				String uri=ele.getNamespaceURI();
+				if(isDefaultNamespace(uri)) {
+					parseDefaultElement(ele);
+				}else if(isContextNamespace(uri)) {
+					parseComponentElement(ele);
 				}
-				parseConstructorArgElements(ele,bd);
-				parsePropertyElement(ele,bd);
-				this.registry.registerBeanDefinition(id, bd);
 			}
 		} catch (Exception e) {
 			throw new BeanDefinitionException("",e);
@@ -62,6 +60,29 @@ public class XMLBeanDefinitionReader {
 				}
 			}
 		}
+	}
+	public boolean isDefaultNamespace(String namespaceURI) {
+		return (!StringUtils.hasLength(namespaceURI) || BeanDefinitionParser.BEANS_NAMESPACE_URI.equals(namespaceURI));
+	}
+	public boolean isContextNamespace(String namespaceURI) {
+		return (!StringUtils.hasLength(namespaceURI) || BeanDefinitionParser.CONTEXT_NAMESPACE_URI.equals(namespaceURI));
+	}
+	private void parseDefaultElement(Element ele) {
+		String id=ele.attributeValue(BeanDefinitionParser.ID_ATTRIBUTE);
+		String className=ele.attributeValue(BeanDefinitionParser.CLASS_ATTRIBUTE);
+		String scope=ele.attributeValue(BeanDefinitionParser.SCOPE_ATTRIBUTE);
+		BeanDefinition bd=new GenericBeanDefinition(id, className);
+		if(scope!=null) {
+			bd.setScope(scope);
+		}
+		parseConstructorArgElements(ele,bd);
+		parsePropertyElement(ele,bd);
+		this.registry.registerBeanDefinition(id, bd);
+	}
+	private void parseComponentElement(Element ele) {
+		String basePackages=ele.attributeValue(BeanDefinitionParser.BASE_PACKAGE_ATTRIBUTE);
+		ClassPathBeanDefinitionScanner scanner=new ClassPathBeanDefinitionScanner(this.registry);
+		scanner.doScan(basePackages);
 	}
 	
 	private void parseConstructorArgElements(Element beanEle, BeanDefinition bd) {
