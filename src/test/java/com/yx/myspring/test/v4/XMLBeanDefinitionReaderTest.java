@@ -18,7 +18,7 @@ import com.yx.myspring.stereotype.Component;
 public class XMLBeanDefinitionReaderTest {
 
 	@Test
-	public void test() {
+	public void testParseScanedBean() {
 		DefaultBeanFactory factory =new DefaultBeanFactory();
 		XMLBeanDefinitionReader reader=new XMLBeanDefinitionReader(factory);
 		reader.loadBeanDefinitions(new ClassPathResource("BeansV4.xml"));
