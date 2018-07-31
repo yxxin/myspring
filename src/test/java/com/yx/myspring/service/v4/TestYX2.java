@@ -1,7 +1,7 @@
 package com.yx.myspring.service.v4;
 
-import com.yx.myspring.dao.v3.AccountDao;
-import com.yx.myspring.dao.v3.ItemDao;
+import com.yx.myspring.dao.v4.AccountDao;
+import com.yx.myspring.dao.v4.ItemDao;
 import com.yx.myspring.stereotype.Component;
 
 //TODO 名称相同的会怎么处理？

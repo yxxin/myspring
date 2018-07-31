@@ -1,5 +1,8 @@
 package com.yx.myspring.context.support;
 
+import com.yx.myspring.beans.factory.annotation.AutowiredAnnotationProcessor;
+import com.yx.myspring.beans.factory.annotation.InjectionMetadata;
+import com.yx.myspring.beans.factory.config.ConfigurableBeanFactory;
 import com.yx.myspring.beans.factory.support.DefaultBeanFactory;
 import com.yx.myspring.beans.factory.xml.XMLBeanDefinitionReader;
 import com.yx.myspring.context.ApplicationContext;
@@ -18,6 +21,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 		factory.setBeanClassLoader(getBeanClassLoader());
 		XMLBeanDefinitionReader reader=new XMLBeanDefinitionReader(factory);
 		reader.loadBeanDefinitions(this.getResourceByPath(path));
+		registerBeanPostProcessors(factory);
 	}
 	protected abstract Resource getResourceByPath(String path);
 	public Object getBean(String beanID) {
@@ -30,5 +34,11 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 
 	public ClassLoader getBeanClassLoader() {
 		return (this.classLoader!=null) ? this.classLoader : ClassUtils.getDefaultClassLoader();
+	}
+	
+	public void registerBeanPostProcessors(ConfigurableBeanFactory beanFactory) {
+		AutowiredAnnotationProcessor processor=new AutowiredAnnotationProcessor();
+		processor.setBeanFactory(beanFactory);
+		beanFactory.addBeanPostProcessor(processor);
 	}
 }

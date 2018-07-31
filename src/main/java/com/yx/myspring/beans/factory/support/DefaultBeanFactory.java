@@ -5,17 +5,19 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 import com.yx.myspring.beans.BeanDefinition;
 import com.yx.myspring.beans.PropertyValue;
 import com.yx.myspring.beans.SimpleTypeConvert;
 import com.yx.myspring.beans.factory.BeanCreateException;
+import com.yx.myspring.beans.factory.config.BeanPostProcessor;
 import com.yx.myspring.beans.factory.config.ConfigurableBeanFactory;
+import com.yx.myspring.beans.factory.config.DependencyDescriptor;
+import com.yx.myspring.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import com.yx.myspring.util.ClassUtils;
 
 public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
@@ -24,6 +26,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 	private Map<String,BeanDefinition> beanDefinitionMap=new ConcurrentHashMap<String,BeanDefinition>(64);
 	private ClassLoader classLoader;
 	private ConstructorResolver resolver=new ConstructorResolver(this);
+	private List<BeanPostProcessor> beanPostProcessors=new ArrayList<BeanPostProcessor>();
 	
 	public BeanDefinition getBeanDefinition(String beanID) {
 		return this.beanDefinitionMap.get(beanID);
@@ -71,6 +74,19 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 	}
 	
 	private void populateBean(BeanDefinition bd, Object bean){
+		
+		// 增加解析注解的方法
+		/*AutowiredAnnotationProcessor processor=new AutowiredAnnotationProcessor();
+		processor.setBeanFactory(this);
+		InjectionMetadata metadata=processor.buildAutowiringMetadata(bean.getClass());
+		metadata.inject(bean);*/
+		for(BeanPostProcessor processor: this.beanPostProcessors) {
+			if(processor instanceof InstantiationAwareBeanPostProcessor) {
+				((InstantiationAwareBeanPostProcessor)processor).postProcessPropertyValues(bean, bd.getID());
+			}
+		}
+		
+		
 		List<PropertyValue> pvs=bd.getPropertyValues();
 		if(pvs==null || pvs.isEmpty()) {
 			return;
@@ -114,6 +130,36 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 	public ClassLoader getBeanClassLoader() {
 		return (this.classLoader!=null) ? this.classLoader : ClassUtils.getDefaultClassLoader();
 	}
-	
 
+	public Object resolveDependency(DependencyDescriptor descriptor) {
+		Class<?> clazz=descriptor.getDependencyType();
+		for(BeanDefinition bd:this.beanDefinitionMap.values()) {
+			resolveBeanClass(bd);
+			if(clazz.isAssignableFrom(bd.getBeanClass())) {
+				return this.getBean(bd.getID());
+			}
+		}
+		return null;
+	}
+	
+	public void resolveBeanClass(BeanDefinition bd) {
+		if(bd.hasBeanClass()) {
+			return;
+		}else {
+			try {
+				bd.resolveBeanClass(this.getBeanClassLoader());
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("can't load class:"+bd.getBeanClassName());
+			}
+		}
+	}
+
+	public void addBeanPostProcessor(BeanPostProcessor postProcessor) {
+		this.beanPostProcessors.add(postProcessor);
+	}
+
+	public List<BeanPostProcessor> getBeanPostProcessors() {
+		return this.beanPostProcessors;
+	}
+	
 }

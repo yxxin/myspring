@@ -14,6 +14,7 @@ public class GenericBeanDefinition implements BeanDefinition {
 	private static final String SCOPE_DEFAULT="";
 	private List<PropertyValue> propertyValues=new ArrayList<PropertyValue>();
 	private ConstructorArgument constructorArgument=new ConstructorArgument();
+	private Class<?> beanClass;
 	
 	public GenericBeanDefinition(String beanID, String className) {
 		this.beanID = beanID;
@@ -59,6 +60,28 @@ public class GenericBeanDefinition implements BeanDefinition {
 	}
 	public void setID(String beanID) {
 		this.beanID = beanID;
+	}
+
+	public Class<?> resolveBeanClass(ClassLoader classLoader) throws ClassNotFoundException {
+		String className=this.getBeanClassName();
+		if(className == null) {
+			return null;
+		}
+		Class<?> resolveClass=classLoader.loadClass(className);
+		this.beanClass=resolveClass;
+		return resolveClass;
+	}
+
+	public Class<?> getBeanClass() throws IllegalStateException {
+		if(this.beanClass == null){
+			throw new IllegalStateException(
+					"Bean class name [" + this.getBeanClassName() + "] has not been resolved into an actual Class");
+		}	
+		return this.beanClass;
+	}
+
+	public boolean hasBeanClass() {
+		return this.beanClass != null;
 	}
 
 }

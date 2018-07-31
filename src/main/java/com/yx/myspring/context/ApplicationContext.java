@@ -1,7 +1,7 @@
 package com.yx.myspring.context;
 
-import com.yx.myspring.beans.factory.config.ConfigurableBeanFactory;
+import com.yx.myspring.beans.factory.BeanFactory;
 
-public interface ApplicationContext extends ConfigurableBeanFactory {
+public interface ApplicationContext extends BeanFactory {
 
 }

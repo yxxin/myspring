@@ -16,4 +16,8 @@ public interface BeanDefinition {
 	//用来存放构造注入的结构
 	ConstructorArgument getConstructorArgument();
 	String getID();
+	
+	public Class<?> resolveBeanClass(ClassLoader classLoader) throws ClassNotFoundException;
+	public Class<?> getBeanClass() throws IllegalStateException ;
+	public boolean hasBeanClass();
 }
