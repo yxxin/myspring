@@ -14,6 +14,7 @@ import com.yx.myspring.beans.BeanDefinition;
 import com.yx.myspring.beans.PropertyValue;
 import com.yx.myspring.beans.SimpleTypeConvert;
 import com.yx.myspring.beans.factory.BeanCreateException;
+import com.yx.myspring.beans.factory.NoSuchBeanDefinitionException;
 import com.yx.myspring.beans.factory.config.BeanPostProcessor;
 import com.yx.myspring.beans.factory.config.ConfigurableBeanFactory;
 import com.yx.myspring.beans.factory.config.DependencyDescriptor;
@@ -160,6 +161,15 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 
 	public List<BeanPostProcessor> getBeanPostProcessors() {
 		return this.beanPostProcessors;
+	}
+
+	public Class<?> getType(String beanID) throws NoSuchBeanDefinitionException {
+		BeanDefinition bd=this.getBeanDefinition(beanID);
+		if(bd == null) {
+			throw new NoSuchBeanDefinitionException(beanID);
+		}
+		resolveBeanClass(bd);
+		return bd.getBeanClass();
 	}
 	
 }

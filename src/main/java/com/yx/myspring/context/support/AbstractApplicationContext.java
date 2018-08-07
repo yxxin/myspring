@@ -1,5 +1,6 @@
 package com.yx.myspring.context.support;
 
+import com.yx.myspring.beans.factory.NoSuchBeanDefinitionException;
 import com.yx.myspring.beans.factory.annotation.AutowiredAnnotationProcessor;
 import com.yx.myspring.beans.factory.annotation.InjectionMetadata;
 import com.yx.myspring.beans.factory.config.ConfigurableBeanFactory;
@@ -41,4 +42,9 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 		processor.setBeanFactory(beanFactory);
 		beanFactory.addBeanPostProcessor(processor);
 	}
+	
+	public Class<?> getType(String beanID) throws NoSuchBeanDefinitionException {
+		return this.factory.getType(beanID);
+	}
+	
 }
