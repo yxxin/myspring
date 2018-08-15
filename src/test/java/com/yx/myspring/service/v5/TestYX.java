@@ -25,5 +25,9 @@ public class TestYX {
 		System.out.println("testyx 1");
 		MessageTracker.addMessage("testyx 1");
 	}
+	
+	public void test1Exception() {
+		throw new NullPointerException();
+	}
 
 }
